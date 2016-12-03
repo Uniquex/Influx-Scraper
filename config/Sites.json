@@ -1,12 +1,12 @@
 [
   {
-    "id": 4,
-    "url": "",
-    "node": ""
+    "id": 1,
+    "url": "https://tradingshenzhen.com/notebook/632-mi-air-133-zoll-8gb-ram-256gb-ssd.html?search_query=xiaomi+notebook+air&results=2#/firmware-win_10_pro_chinese_only_licence",
+    "node": "//div//p//span[@id='our_price_display']"
   },
   {
-    "id": 8,
-    "url": "",
-    "node": ""
+    "id": 2,
+    "url": "https://www.amazon.de/dp/B01M20VBU7?smid=A3JWKAKR8XB7XF&linkCode=df0&creative=22498&creativeASIN=B01M211K53&childASIN=B01M211K53",
+    "node": "//span[@id='priceblock_ourprice']"
   }
 ]

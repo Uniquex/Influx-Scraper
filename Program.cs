@@ -10,11 +10,20 @@ namespace Scraper
     {
         static void Main(string[] args)
         {
-            DBCon dbcon = new DBCon();
+// DBCon dbcon = new DBCon();
 
-            dbcon.OpenConnection();
+// dbcon.OpenConnection();
 
-            dbcon.WriteData(100);
+// dbcon.WriteData(100);
+
+            WebScrapper scp = new WebScrapper();
+
+            Sites sites = scp.readConfigFile();
+
+            Console.WriteLine();
+
+            
+
             Console.Read();
 
 
