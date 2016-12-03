@@ -8,14 +8,22 @@ namespace Scraper
 {
     class Sites
     {
-        List<Site> sites { set; get; }
+        public List<Site> sites = new List<Site>();
 
-        public void AddSites(Site site)
+        public void AddSites(int id, String url, String node)
         {
-            if (site != null)
-                sites.Add(site);
-            else
-                Console.Out.WriteLine("Site == null");
+            Site site = new Site(id, url, node);
+            sites.Add(site);
+        }
+
+        public Site getSite(int pos)
+        {
+            return sites.ElementAt(pos);
+        }
+
+        public int siteCount()
+        {
+            return sites.Count;
         }
     }
 }

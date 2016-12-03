@@ -6,16 +6,24 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using HtmlAgilityPack;
 
 namespace Scraper
 {
     class WebScrapper
     {
 
-        public void Scrap()
+        public void Scrap(Sites sites)
         {
-
-            
+            for (int x = 0; x < sites.siteCount(); x++)
+            {
+                var Webget = new HtmlWeb();
+                var doc = Webget.Load(sites.sites.ElementAt(x).url);
+                foreach (HtmlNode node in doc.DocumentNode.SelectNodes(sites.sites.ElementAt(x).node))
+                {
+                    sites.sites.ElementAt(x).price = node.ChildNodes[0].InnerHtml;
+                }
+            }
         }
 
         public Sites readConfigFile()
@@ -24,7 +32,6 @@ namespace Scraper
 
             try
             {
-                //TODO Parsing JSON config file and create Site objects
                 // [
                 // {
                 // 'id': ''
@@ -37,25 +44,28 @@ namespace Scraper
 
                 dynamic siteArray = JArray.Parse(json);
 
-                for (int x = 0; x<siteArray.Count-1; x++)
+                for (int x = 0; x < siteArray.Count; x++)
                 {
                     dynamic site = siteArray[x];
 
-                    Site siteobj = new Site((int)site.id, (String)site.url, (String)site.node);
+                    //Site siteobj = new Site((int)site.id, (String)site.url, (String)site.node);
 
-                    sites.AddSites(siteobj);
+                    sites.AddSites((int)site.id, (String)site.url, (String)site.node);
                 }
             }
             catch (FileNotFoundException fnfex)
             {
                 Console.WriteLine("File not found");
+                Console.WriteLine(fnfex.Message);
             }
-            catch(DirectoryNotFoundException dnfex)
+            catch (DirectoryNotFoundException dnfex)
             {
                 Console.WriteLine("Directory not found!");
+                Console.WriteLine(dnfex.Message);
             }
 
             return sites;
+
 
         }
     }

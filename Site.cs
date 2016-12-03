@@ -9,14 +9,20 @@ namespace Scraper
     class Site
     {
         private int id;
-        private String url;
-        private String node;
+        public String url { get; }
+        public String node { get; }
+        public String price { get; set; }
 
         public Site(int id, string url, string node)
         {
             this.id = id;
             this.url = url;
             this.node = node;
+        }
+
+        public String toString()
+        {
+            return this.id + " Price: " + price;
         }
     }
 }
