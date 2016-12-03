@@ -25,3 +25,6 @@ C:\Users\wvitz\GIT\Influx Scraper\obj\Debug\Scraper.csproj.App.config
 C:\Users\wvitz\GIT\Influx Scraper\obj\Debug\Scraper.csprojResolveAssemblyReference.cache
 C:\Users\wvitz\GIT\Influx Scraper\obj\Debug\Scraper.exe
 C:\Users\wvitz\GIT\Influx Scraper\obj\Debug\Scraper.pdb
+C:\Users\wvitz\GIT\Influx Scraper\bin\Debug\HtmlAgilityPack.dll
+C:\Users\wvitz\GIT\Influx Scraper\bin\Debug\HtmlAgilityPack.pdb
+C:\Users\wvitz\GIT\Influx Scraper\bin\Debug\HtmlAgilityPack.xml
