@@ -23,13 +23,21 @@ namespace Scraper
             Console.WriteLine();
 
             scp.Scrap(sites);
+<<<<<<< HEAD
 
             for(int x = 0; x<sites.siteCount(); x++)
             {
                 String tost = sites.getSite(x).ToString();
                 Console.WriteLine(tost);
             }
+=======
+>>>>>>> master
 
+            for(int x = 0; x<sites.siteCount(); x++)
+            {
+                String tost = sites.getSite(x).ToString();
+                Console.WriteLine(tost);
+            }
             Console.Read();
 
 
