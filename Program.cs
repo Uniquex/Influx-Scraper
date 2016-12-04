@@ -10,34 +10,25 @@ namespace Scraper
     {
         static void Main(string[] args)
         {
-// DBCon dbcon = new DBCon();
 
-// dbcon.OpenConnection();
-
-// dbcon.WriteData(100);
+// 
 
             WebScrapper scp = new WebScrapper();
 
             Sites sites = scp.readConfigFile();
 
-            Console.WriteLine();
+            DBCon dbcon = new DBCon();
+            dbcon.OpenConnection();
 
-            scp.Scrap(sites);
-<<<<<<< HEAD
-
-            for(int x = 0; x<sites.siteCount(); x++)
+            var timer = new System.Threading.Timer((e) =>
             {
-                String tost = sites.getSite(x).ToString();
-                Console.WriteLine(tost);
-            }
-=======
->>>>>>> master
+                int x = 1;
+                scp.Scrap(sites);
+                dbcon.WriteData(sites);
+                Console.WriteLine("Count :" + x++);
 
-            for(int x = 0; x<sites.siteCount(); x++)
-            {
-                String tost = sites.getSite(x).ToString();
-                Console.WriteLine(tost);
-            }
+            }, null, 0, (int)TimeSpan.FromMinutes(1).TotalMilliseconds);
+
             Console.Read();
 
 

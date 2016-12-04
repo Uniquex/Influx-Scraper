@@ -6,7 +6,7 @@
   },
   {
     "id": 2,
-    "url": "https://www.amazon.de/dp/B01M20VBU7?smid=A3JWKAKR8XB7XF&linkCode=df0&creative=22498&creativeASIN=B01M211K53&childASIN=B01M211K53",
-    "node": "//span[@id='priceblock_ourprice']"
+    "url": "http://www.gearbest.com/laptops/pp_421980.html",
+    "node": "//div//span[@id='unit_price']"
   }
 ]

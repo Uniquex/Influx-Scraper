@@ -15,7 +15,7 @@ namespace Scraper
     class DBCon
     {
         InfluxDbClient influxDbClient;
-        String dbName = "newDbName";
+        String dbName = "db_1";
 
         public void OpenConnection()
         {
@@ -38,30 +38,34 @@ namespace Scraper
 
         }
 
-        public async void WriteData(double price)
+        public async void WriteData(Sites sites)
         {
-            if(this.influxDbClient != null)
+           if(this.influxDbClient != null)
             {
-                var pointToWrite = new Point()
+                for(int x = 0; x < sites.siteCount(); x++)
                 {
-                    Name = "reading", // serie/measurement/table to write into
-                    Tags = new Dictionary<string, object>()
-                        {
-                            { "SensorId", 8 },
-                            { "SerialNumber", "00AF123B" }
-                        },
-                    Fields = new Dictionary<string, object>()
-                        {
-                            { "SensorState", "act" },
-                            { "Humidity", 431 },
-                            { "Temperature", 22.1 },
-                            { "Resistance", 34957 }
-                        },
-                    Timestamp = DateTime.UtcNow // optional (can be set to any DateTime moment)
-                };
+                    Site sit = sites.getSite(x);
+                    int id = sit.id;
+                    float price = sit.price;
+                    String url = sit.url;
+
+
+                    var pointToWrite = new Point()
+                    {
+                        Name = "Sites", // serie/measurement/table to write into
+                        Tags = new Dictionary<string, object>()
+                            {
+                                { "Id", id },
+                            },
+                        Fields = new Dictionary<string, object>()
+                            {
+                                { "Price", price }
+                            },
+                        Timestamp = DateTime.UtcNow // optional (can be set to any DateTime moment)
+                    };
 
                 var response = await influxDbClient.Client.WriteAsync(dbName, pointToWrite);
-
+                }
             }
 
         }

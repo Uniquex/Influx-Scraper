@@ -19,11 +19,35 @@ namespace Scraper
             {
                 var Webget = new HtmlWeb();
                 var doc = Webget.Load(sites.sites.ElementAt(x).url);
-                foreach (HtmlNode node in doc.DocumentNode.SelectNodes(sites.sites.ElementAt(x).node))
+                try
                 {
-                    sites.sites.ElementAt(x).price = node.ChildNodes[0].InnerHtml;
+                    foreach (HtmlNode node in doc.DocumentNode.SelectNodes(sites.sites.ElementAt(x).node))
+                    {
+                        String price = node.ChildNodes[0].InnerHtml;
+
+                        if (price.EndsWith("€"))
+                        {
+                            price = price.TrimEnd('€');
+                        }
+                        else if (price.StartsWith("EUR"))
+                        {
+                            price = price.Substring(4);
+                        }
+
+                        if(price.Length > 3)
+                        {
+                            price = price.Remove(4);
+                        }
+
+                        sites.sites.ElementAt(x).price = float.Parse(price);
+                    }
+                }
+                catch(Exception)
+                {
+
                 }
             }
+            
         }
 
         public Sites readConfigFile()
@@ -40,7 +64,9 @@ namespace Scraper
                 // }
                 // ]
 
-                String json = System.IO.File.ReadAllText(@"C:\Users\wvitz\GIT\Influx Scraper\config\Sites.json");
+
+
+                String json = System.IO.File.ReadAllText(@"Sites.json");
 
                 dynamic siteArray = JArray.Parse(json);
 

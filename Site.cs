@@ -8,10 +8,10 @@ namespace Scraper
 {
     class Site
     {
-        private int id;
+        public int id;
         public String url { get; }
         public String node { get; }
-        public String price { get; set; }
+        public float price { get; set; }
 
         public Site(int id, string url, string node)
         {
@@ -22,7 +22,7 @@ namespace Scraper
 
         public String toString()
         {
-            return this.id + " Price: " + price;
+            return this.id + " Price: " + this.price;
         }
     }
 }
