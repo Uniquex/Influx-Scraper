@@ -12,9 +12,10 @@ namespace Scraper
 {
     class WebScrapper
     {
-
+        public int counter = 0;
         public void Scrap(Sites sites)
         {
+            counter++;
             for (int x = 0; x < sites.siteCount(); x++)
             {
                 var Webget = new HtmlWeb();
@@ -25,21 +26,60 @@ namespace Scraper
                     {
                         String price = node.ChildNodes[0].InnerHtml;
 
+                        Console.WriteLine(price);
+
+                        if (price.Contains(","))
+                        {
+                            price = price.TrimEnd(',');
+                            Console.WriteLine("1 - " + price);
+                        }
+                        if (price.Contains("."))
+                        {
+                            price = price.TrimEnd('.');
+                            Console.WriteLine("2 - " + price);
+                        }
                         if (price.EndsWith("€"))
                         {
                             price = price.TrimEnd('€');
+                            Console.WriteLine("3 - " + price);
                         }
-                        else if (price.StartsWith("EUR"))
+
+                        if (price.StartsWith("€"))
+                        {
+                            price = price.Remove(1, 1);
+                            Console.WriteLine("4 - " + price);
+                        }
+
+                        if (price.StartsWith("EUR"))
                         {
                             price = price.Substring(4);
+                            Console.WriteLine("5 - " + price);
                         }
 
                         if(price.Length > 3)
                         {
-                            price = price.Remove(4);
+                            price = price.Remove(3);
+                            Console.WriteLine("6 - " + price);
                         }
 
-                        sites.sites.ElementAt(x).price = float.Parse(price);
+                        if(price.EndsWith("."))
+                        {
+                            price = price.Remove(4);
+                            Console.WriteLine("7 -" + price);
+                        }
+                        try
+                        {
+                            sites.sites.ElementAt(x).price = float.Parse(price);
+                        }
+                        catch (FormatException fex)
+                        {
+                            Console.WriteLine(fex.Message);
+                        }
+                        catch (ArgumentNullException anex)
+                        {
+                            Console.WriteLine(anex.Message);
+                        }
+
                     }
                 }
                 catch(Exception)

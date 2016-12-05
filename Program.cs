@@ -20,14 +20,15 @@ namespace Scraper
             DBCon dbcon = new DBCon();
             dbcon.OpenConnection();
 
-            var timer = new System.Threading.Timer((e) =>
-            {
-                int x = 1;
-                scp.Scrap(sites);
-                dbcon.WriteData(sites);
-                Console.WriteLine("Count :" + x++);
-
-            }, null, 0, (int)TimeSpan.FromMinutes(1).TotalMilliseconds);
+            //var timer = new System.Threading.Timer((e) =>
+            //{
+            scp.Scrap(sites);
+            dbcon.WriteData(sites);
+            Console.WriteLine("Count: " + scp.counter);
+            //Console.WriteLine(sites.getSite(1).url);
+            Console.WriteLine(sites.getSite(1).price);
+                
+            //}, null, 0, (int)TimeSpan.FromMinutes(60).TotalMilliseconds);
 
             Console.Read();
 
