@@ -10,9 +10,6 @@ namespace Scraper
     {
         static void Main(string[] args)
         {
-
-// 
-
             WebScrapper scp = new WebScrapper();
 
             Sites sites = scp.readConfigFile();
@@ -24,14 +21,15 @@ namespace Scraper
             //{
             scp.Scrap(sites);
             dbcon.WriteData(sites);
-            Console.WriteLine("Count: " + scp.counter);
+            //Console.WriteLine("Count: " + scp.counter);
             //Console.WriteLine(sites.getSite(1).url);
-            Console.WriteLine(sites.getSite(1).price);
-                
+            //Console.WriteLine(sites.getSite(1).price);
+
             //}, null, 0, (int)TimeSpan.FromMinutes(60).TotalMilliseconds);
 
-            //Console.Read();
+            Console.Read();
 
+            Environment.Exit(0);
 
         }
     }

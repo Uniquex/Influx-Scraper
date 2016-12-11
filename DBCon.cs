@@ -65,6 +65,11 @@ namespace Scraper
                     };
 
                 var response = await influxDbClient.Client.WriteAsync(dbName, pointToWrite);
+
+                if(!response.Success)
+                {
+                    Console.WriteLine("Could not write into DB");
+                }
                 }
             }
 

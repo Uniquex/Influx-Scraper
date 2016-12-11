@@ -13,6 +13,7 @@ namespace Scraper
     class WebScrapper
     {
         public int counter = 0;
+        Boolean debug = false;
         public void Scrap(Sites sites)
         {
             counter++;
@@ -30,54 +31,89 @@ namespace Scraper
                     {
                         String price = node.ChildNodes[0].InnerHtml;
 
-                        Console.WriteLine(price);
+                        if (debug)
+                        { Console.WriteLine(price); }
 
                         if (price.Contains(","))
                         {
                             price = price.TrimEnd(',');
-                            Console.WriteLine("1 - " + price);
+
+                            if (debug)
+                            {
+                                Console.WriteLine("1 - " + price);
+                            }
                         }
                         if (price.Contains("."))
                         {
                             price = price.TrimEnd('.');
-                            Console.WriteLine("2 - " + price);
+
+                            if (debug)
+                            {
+                                Console.WriteLine("2 - " + price);
+                            }
                         }
                         if (price.EndsWith("€"))
                         {
                             price = price.TrimEnd('€');
-                            Console.WriteLine("3 - " + price);
+
+                            if (debug)
+                            {
+                                Console.WriteLine("3 - " + price);
+                            }
                         }
 
                         if (price.StartsWith("€"))
                         {
                             price = price.Remove(1, 1);
-                            Console.WriteLine("4 - " + price);
+
+                            if (debug)
+                            {
+                                Console.WriteLine("4 - " + price);
+                            }
                         }
 
                         if (price.StartsWith("EUR"))
                         {
                             price = price.Substring(4);
-                            Console.WriteLine("5 - " + price);
+
+                            if (debug)
+                            {
+                                Console.WriteLine("5 - " + price);
+                            }
                         }
 
                         if(price.Length > 3)
                         {
                             price = price.Remove(3);
-                            Console.WriteLine("6 - " + price);
+
+                            if (debug)
+                            {
+                                Console.WriteLine("6 - " + price);
+                            }
                         }
 
                         if(price.EndsWith("."))
                         {
                             price = price.Remove(4);
-                            Console.WriteLine("7 - " + price);
+
+                            if (debug)
+                            {
+                                Console.WriteLine("7 - " + price);
+                            }
+                            
                         }
 
                         if(siteurl.Contains("gearbest"))
                         {
-                            float price1 = float.Parse(price) / 1.05f;
+                            float price1 = float.Parse(price) / 1.10f;
                             price = price1.ToString();
 
-                            Console.WriteLine("8 - " + price);
+                            price = price.Split(',')[0];
+
+                            if (debug)
+                            {
+                                Console.WriteLine("8 - " + price);
+                            }
 
                         }
 
@@ -123,10 +159,12 @@ namespace Scraper
                 // }
                 // ]
 
+                String json = "[   {     \"id\": 1,     \"url\": \"https://tradingshenzhen.com/notebook/632-mi-air-133-zoll-8gb-ram-256gb-ssd.html?search_query=xiaomi+notebook+air&results=2#/firmware-win_10_pro_chinese_only_licence\",     \"node\": \"//div//p//span[@id='our_price_display']\"   },   {     \"id\": 2,     \"url\": \"http://www.gearbest.com/laptops/pp_421980.html?wid=21\",     \"node\": \"//*[@id='unit_price']\"   },   {     \"id\": 3,     \"url\": \"http://www.gearbest.com/laptops/pp_416105.html?wid=21\",     \"node\": \"//*[@id='unit_price']\"   }]";
 
-
-                String json = System.IO.File.ReadAllText(@"Sites.json");
-
+                //Linux for Cronjob
+                //String json = System.IO.File.ReadAllText(@"~/mono/Influx-Scraper/bin/Debug/Sites.json");
+                //Windows
+                //String json = System.IO.File.ReadAllText(@"Sites.json");
                 dynamic siteArray = JArray.Parse(json);
 
                 for (int x = 0; x < siteArray.Count; x++)
