@@ -30,7 +30,7 @@ namespace Scraper
                 
             //}, null, 0, (int)TimeSpan.FromMinutes(60).TotalMilliseconds);
 
-            Console.Read();
+            //Console.Read();
 
 
         }

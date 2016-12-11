@@ -18,6 +18,10 @@ namespace Scraper
             counter++;
             for (int x = 0; x < sites.siteCount(); x++)
             {
+                String siteurl = sites.sites.ElementAt(x).url;
+
+                
+
                 var Webget = new HtmlWeb();
                 var doc = Webget.Load(sites.sites.ElementAt(x).url);
                 try
@@ -65,8 +69,23 @@ namespace Scraper
                         if(price.EndsWith("."))
                         {
                             price = price.Remove(4);
-                            Console.WriteLine("7 -" + price);
+                            Console.WriteLine("7 - " + price);
                         }
+
+                        if(siteurl.Contains("gearbest"))
+                        {
+                            float price1 = float.Parse(price) / 1.05f;
+                            price = price1.ToString();
+
+                            Console.WriteLine("8 - " + price);
+
+                        }
+
+                        if (float.Parse(price) == 0)
+                        {
+                            price = null;
+                        }
+
                         try
                         {
                             sites.sites.ElementAt(x).price = float.Parse(price);
