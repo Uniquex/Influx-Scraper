@@ -29,6 +29,8 @@ namespace Scraper
 
             //Console.Read();
 
+            //Environment.Exit(0);
+
         }
     }
 }

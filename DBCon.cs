@@ -33,43 +33,41 @@ namespace Scraper
             }
         }
 
-        public async void ReadData()
-        {
-
-        }
-
         public async void WriteData(Sites sites)
         {
            if(this.influxDbClient != null)
             {
+                List<Point> points = new List<Point>();
                 for(int x = 0; x < sites.siteCount(); x++)
                 {
-                    Site sit = sites.getSite(x);
-                    int id = sit.id;
-                    float price = sit.price;
-                    String url = sit.url;
-
+                    Site site = sites.getSite(x);
 
                     var pointToWrite = new Point()
                     {
                         Name = "Sites", // serie/measurement/table to write into
                         Tags = new Dictionary<string, object>()
                             {
-                                { "Id", id },
+                                { "Id", site.id },
                             },
                         Fields = new Dictionary<string, object>()
                             {
-                                { "Price", price }
+                                { "Price", site.price }
                             },
                         Timestamp = DateTime.UtcNow // optional (can be set to any DateTime moment)
                     };
 
-                var response = await influxDbClient.Client.WriteAsync(dbName, pointToWrite);
+                    points.Add(pointToWrite);
 
-                if(!response.Success)
+                }
+
+                var response = await influxDbClient.Client.WriteAsync(dbName, points);
+
+
+                System.Threading.Thread.Sleep(1000);
+
+                if (!response.Success)
                 {
                     Console.WriteLine("Could not write into DB");
-                }
                 }
             }
 
