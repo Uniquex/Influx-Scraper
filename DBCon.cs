@@ -72,6 +72,17 @@ namespace Scraper
             }
 
         }
+
+        public void checkData()
+        {
+            var queries = new []
+            {
+                "SELECT last(price) FROM reading WHERE id == 1",
+                "SELECT last(price) FROM reading WHERE id == 2",
+                "SELECT last(price) FROM reading WHERE id == 3"
+            }
+            var response = await influxDbClient.Client.QueryAsync(dbName, queries);
+        }
     }
 
 
