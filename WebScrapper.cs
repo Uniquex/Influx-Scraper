@@ -12,19 +12,18 @@ namespace Scraper
 {
     class WebScrapper
     {
-        public int counter = 0;
         Boolean debug = false;
-        public void Scrap(Sites sites)
+
+
+        public Sites Scrap(Sites sites)
         {
-            counter++;
             for (int x = 0; x < sites.siteCount(); x++)
             {
                 String siteurl = sites.sites.ElementAt(x).url;
 
-                
-
                 var Webget = new HtmlWeb();
                 var doc = Webget.Load(sites.sites.ElementAt(x).url);
+
                 try
                 {
                     foreach (HtmlNode node in doc.DocumentNode.SelectNodes(sites.sites.ElementAt(x).node))
@@ -139,10 +138,13 @@ namespace Scraper
                 }
                 catch(Exception)
                 {
-
+                    Console.WriteLine("Undefined exception");
                 }
+
+                
             }
-            
+
+           return sites; 
         }
 
         public Sites readConfigFile()
@@ -161,10 +163,6 @@ namespace Scraper
 
                 String json = "[   {     \"id\": 1,     \"url\": \"https://tradingshenzhen.com/notebook/632-mi-air-133-zoll-8gb-ram-256gb-ssd.html?search_query=xiaomi+notebook+air&results=2#/firmware-win_10_pro_chinese_only_licence\",     \"node\": \"//div//p//span[@id='our_price_display']\"   },   {     \"id\": 2,     \"url\": \"http://www.gearbest.com/laptops/pp_421980.html?wid=21\",     \"node\": \"//*[@id='unit_price']\"   },   {     \"id\": 3,     \"url\": \"http://www.gearbest.com/laptops/pp_416105.html?wid=21\",     \"node\": \"//*[@id='unit_price']\"   }]";
 
-                //Linux for Cronjob
-                //String json = System.IO.File.ReadAllText(@"~/mono/Influx-Scraper/bin/Debug/Sites.json");
-                //Windows
-                //String json = System.IO.File.ReadAllText(@"Sites.json");
                 dynamic siteArray = JArray.Parse(json);
 
                 for (int x = 0; x < siteArray.Count; x++)
@@ -188,8 +186,6 @@ namespace Scraper
             }
 
             return sites;
-
-
         }
     }
 }

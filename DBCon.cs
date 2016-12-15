@@ -16,6 +16,8 @@ namespace Scraper
     {
         InfluxDbClient influxDbClient;
         String dbName = "db_1";
+        String tblName = "Sites";
+        Boolean debug = true;
 
         public void OpenConnection()
         {
@@ -44,7 +46,7 @@ namespace Scraper
 
                     var pointToWrite = new Point()
                     {
-                        Name = "Sites", // serie/measurement/table to write into
+                        Name = tblName, // serie/measurement/table to write into
                         Tags = new Dictionary<string, object>()
                             {
                                 { "Id", site.id },
@@ -53,34 +55,27 @@ namespace Scraper
                             {
                                 { "Price", site.price }
                             },
-                        Timestamp = DateTime.UtcNow // optional (can be set to any DateTime moment)
+                        Timestamp = DateTime.Now // optional (can be set to any DateTime moment)
                     };
 
                     points.Add(pointToWrite);
 
                 }
 
-                var response = await influxDbClient.Client.WriteAsync(dbName, points);
-
-
-                System.Threading.Thread.Sleep(1000);
-
-                if (!response.Success)
-                {
-                    Console.WriteLine("Could not write into DB");
-                }
+                await influxDbClient.Client.WriteAsync(dbName, points);
             }
 
         }
 
-        public void checkData()
+        public async void checkData(Sites sites)
         {
-            var queries = new []
+            
+            var queries = new string[sites.siteCount()];
+            for(int x = 0; x < sites.siteCount(); x++)
             {
-                "SELECT last(price) FROM reading WHERE id == 1",
-                "SELECT last(price) FROM reading WHERE id == 2",
-                "SELECT last(price) FROM reading WHERE id == 3"
+                queries[x] = "SELECT last(price) FROM " + tblName + " WHERE id == " + x;
             }
+
             var response = await influxDbClient.Client.QueryAsync(dbName, queries);
         }
     }
