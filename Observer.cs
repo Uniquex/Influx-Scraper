@@ -8,7 +8,8 @@ namespace Scraper
 {
     class Observer : IObserver<Sites>
     {
-        String observername;
+        private String observername;
+        private IDisposable unsubscriber;
 
         public Observer(String name)
         {
@@ -17,6 +18,12 @@ namespace Scraper
         public void OnCompleted()
         {
             throw new NotImplementedException();
+        }
+
+        public virtual void Subscribe(IObservable<Sites> obs)
+        {
+            if (obs != null)
+                unsubscriber = obs.Subscribe(this);
         }
 
         public void WriteToDB(Sites sites)

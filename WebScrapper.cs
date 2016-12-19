@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using HtmlAgilityPack;
+using System.Net;
 
 namespace Scraper
 {
@@ -14,137 +15,172 @@ namespace Scraper
     {
         Boolean debug = false;
 
+        public static bool CheckForInternetConnection()
+        {
+            try
+            {
+                using (var client = new WebClient())
+                using (var stream = client.OpenRead("http://www.google.com"))
+                {
+                    return true;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
 
         public Sites Scrap(Sites sites)
         {
-            for (int x = 0; x < sites.siteCount(); x++)
+            if(CheckForInternetConnection())
             {
-                String siteurl = sites.sites.ElementAt(x).url;
-
-                var Webget = new HtmlWeb();
-                var doc = Webget.Load(sites.sites.ElementAt(x).url);
-
-                try
+                for (int x = 0; x < sites.siteCount(); x++)
                 {
-                    foreach (HtmlNode node in doc.DocumentNode.SelectNodes(sites.sites.ElementAt(x).node))
+                    String siteurl = sites.sites.ElementAt(x).url;
+
+                    var Webget = new HtmlWeb();
+                    var doc = Webget.Load(sites.sites.ElementAt(x).url);
+
+                    try
                     {
-                        String price = node.ChildNodes[0].InnerHtml;
-
-                        if (debug)
-                        { Console.WriteLine(price); }
-
-                        if (price.Contains(","))
+                        foreach (HtmlNode node in doc.DocumentNode.SelectNodes(sites.sites.ElementAt(x).node))
                         {
-                            price = price.TrimEnd(',');
+                            String price = node.ChildNodes[0].InnerHtml;
 
                             if (debug)
+                            { Console.WriteLine(price); }
+
+                            if (price.Contains(","))
                             {
-                                Console.WriteLine("1 - " + price);
-                            }
-                        }
-                        if (price.Contains("."))
-                        {
-                            price = price.TrimEnd('.');
+                                price = price.TrimEnd(',');
 
-                            if (debug)
+                                if (debug)
+                                {
+                                    Console.WriteLine("0 - " + price);
+                                }
+                            }
+
+                            if(price.Contains("Loading"))
                             {
-                                Console.WriteLine("2 - " + price);
-                            }
-                        }
-                        if (price.EndsWith("€"))
-                        {
-                            price = price.TrimEnd('€');
+                                price = "0";
 
-                            if (debug)
+                                if (debug)
+                                {
+                                    Console.WriteLine("1 - " + price);
+                                }
+                            }
+
+                            if (price.Contains("."))
                             {
-                                Console.WriteLine("3 - " + price);
+                                price = price.TrimEnd('.');
+
+                                if(debug)
+                                {
+                                    Console.WriteLine("2 - " + price);
+                                }
                             }
-                        }
-
-                        if (price.StartsWith("€"))
-                        {
-                            price = price.Remove(1, 1);
-
-                            if (debug)
+                            if (price.EndsWith("€"))
                             {
-                                Console.WriteLine("4 - " + price);
+                                price = price.TrimEnd('€');
+
+                                if (debug)
+                                {
+                                    Console.WriteLine("3 - " + price);
+                                }
                             }
-                        }
 
-                        if (price.StartsWith("EUR"))
-                        {
-                            price = price.Substring(4);
-
-                            if (debug)
+                            if (price.StartsWith("€"))
                             {
-                                Console.WriteLine("5 - " + price);
+                                price = price.Remove(1, 1);
+
+                                if (debug)
+                                {
+                                    Console.WriteLine("4 - " + price);
+                                }
                             }
-                        }
 
-                        if(price.Length > 3)
-                        {
-                            price = price.Remove(3);
-
-                            if (debug)
+                            if (price.StartsWith("EUR"))
                             {
-                                Console.WriteLine("6 - " + price);
+                                price = price.Substring(4);
+
+                                if (debug)
+                                {
+                                    Console.WriteLine("5 - " + price);
+                                }
                             }
-                        }
 
-                        if(price.EndsWith("."))
-                        {
-                            price = price.Remove(4);
-
-                            if (debug)
+                            if(price.Length > 3)
                             {
-                                Console.WriteLine("7 - " + price);
+                                price = price.Remove(3);
+
+                                if (debug)
+                                {
+                                    Console.WriteLine("6 - " + price);
+                                }
                             }
+
+                            if(price.EndsWith("."))
+                            {
+                                price = price.Remove(4);
+
+                                if (debug)
+                                {
+                                    Console.WriteLine("7 - " + price);
+                                }
                             
-                        }
+                            }
 
-                        if(siteurl.Contains("gearbest"))
-                        {
-                            float price1 = float.Parse(price) / 1.10f;
-                            price = price1.ToString();
-
-                            price = price.Split(',')[0];
-
-                            if (debug)
+                            if(siteurl.Contains("gearbest") && !price.Contains("Loa"))
                             {
-                                Console.WriteLine("8 - " + price);
+                                float price1 = float.Parse(price) / 1.10f;
+                                price = price1.ToString();
+
+                                price = price.Split(',')[0];
+
+                                if (debug)
+                                {
+                                    Console.WriteLine("8 - " + price);
+                                }
+
+                            }
+
+
+                            try
+                            {
+                                sites.sites.ElementAt(x).price = float.Parse(price);
+                            }
+                            catch (FormatException fex)
+                            {
+                                Console.WriteLine(fex.Message);
+                            }
+                            catch (ArgumentNullException anex)
+                            {
+                                Console.WriteLine(anex.Message);
                             }
 
                         }
-
-                        if (float.Parse(price) == 0)
-                        {
-                            price = null;
-                        }
-
-                        try
-                        {
-                            sites.sites.ElementAt(x).price = float.Parse(price);
-                        }
-                        catch (FormatException fex)
-                        {
-                            Console.WriteLine(fex.Message);
-                        }
-                        catch (ArgumentNullException anex)
-                        {
-                            Console.WriteLine(anex.Message);
-                        }
-
                     }
-                }
-                catch(Exception)
-                {
-                    Console.WriteLine("Undefined exception");
-                }
-
+                    catch(HtmlWebException web)
+                    {
+                        Console.WriteLine(web.Message);
+                        Console.WriteLine("Undefined exception");
+                    }
+                    catch(FormatException fex)
+                    {
+                        Console.WriteLine(fex.Message);
+                        Console.WriteLine("Format exception");
+                    }
                 
+                }
             }
+            else
+            {
+                Console.WriteLine("no internet connection");
+            }
+            
 
-           return sites; 
+            return sites; 
         }
 
         public Sites readConfigFile()
@@ -161,7 +197,7 @@ namespace Scraper
                 // }
                 // ]
 
-                String json = "[   {     \"id\": 1,     \"url\": \"https://tradingshenzhen.com/notebook/632-mi-air-133-zoll-8gb-ram-256gb-ssd.html?search_query=xiaomi+notebook+air&results=2#/firmware-win_10_pro_chinese_only_licence\",     \"node\": \"//div//p//span[@id='our_price_display']\"   },   {     \"id\": 2,     \"url\": \"http://www.gearbest.com/laptops/pp_421980.html?wid=21\",     \"node\": \"//*[@id='unit_price']\"   },   {     \"id\": 3,     \"url\": \"http://www.gearbest.com/laptops/pp_416105.html?wid=21\",     \"node\": \"//*[@id='unit_price']\"   }]";
+                String json = "[   {     \"id\": 1,     \"url\": \"https://tradingshenzhen.com/notebook/632-mi-air-133-zoll-8gb-ram-256gb-ssd.html?search_query=xiaomi+notebook+air&results=2#/firmware-win_10_pro_chinese_only_licence\",     \"node\": \"//div//p//span[@id='our_price_display']\"   },   {     \"id\": 2,     \"url\": \"http://www.gearbest.com/laptops/pp_421980.html?wid=4\",     \"node\": \"//*[@id='unit_price']\"   },   {     \"id\": 3,     \"url\": \"http://www.gearbest.com/laptops/pp_416105.html?wid=21\",     \"node\": \"//*[@id='unit_price']\"   }]";
 
                 dynamic siteArray = JArray.Parse(json);
 

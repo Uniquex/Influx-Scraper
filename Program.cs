@@ -18,6 +18,8 @@ namespace Scraper
 
             tracker.Subscribe(influxDB);
 
+            tracker.CheckforUpdate();
+
 
 
             //var timer = new System.Threading.Timer((e) =>

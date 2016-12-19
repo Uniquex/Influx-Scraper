@@ -8,17 +8,17 @@ namespace Scraper
 {
     //https://msdn.microsoft.com/en-us/library/dd990377(v=vs.110).aspx#Version%20Information
 
-    class SiteTracker : IObservable<Observer>
+    class SiteTracker : IObservable<Sites>
     {
-        List<IObserver<Observer>> obslist;
+        List<IObserver<Sites>> obslist;
 
 
         public SiteTracker()
         {
-            obslist = new List<IObserver<Observer>>();
+            obslist = new List<IObserver<Sites>>();
         }
 
-        public IDisposable Subscribe(IObserver<Observer> observer)
+        public IDisposable Subscribe(IObserver<Sites> observer)
         {
             if (!obslist.Contains(observer))
                 obslist.Add(observer);
@@ -27,24 +27,25 @@ namespace Scraper
 
         public void CheckforUpdate()
         {
-            DBCon dbcon = new DBCon();
             WebScrapper scp = new WebScrapper();
-
             Sites sites = scp.readConfigFile();
             scp.Scrap(sites);
+            
+            foreach(Observer obs in obslist)
+            {
+                obs.OnNext(sites);
+            }
 
-            dbcon.checkData(sites);
-
-
+            //dbcon.checkData(sites);
         }
     }
 
     class Unsubscriber : IDisposable
     {
-        private List<IObserver<Observer>> _observers;
-        private IObserver<Observer> _observer;
+        private List<IObserver<Sites>> _observers;
+        private IObserver<Sites> _observer;
 
-        public Unsubscriber(List<IObserver<Observer>> observers, IObserver<Observer> observer)
+        public Unsubscriber(List<IObserver<Sites>> observers, IObserver<Sites> observer)
         {
             this._observers = observers;
             this._observer = observer;

@@ -17,13 +17,12 @@ namespace Scraper
         InfluxDbClient influxDbClient;
         String dbName = "db_1";
         String tblName = "Sites";
-        Boolean debug = true;
 
         public void OpenConnection()
         {
             try
             {
-                influxDbClient = new InfluxDbClient("http://192.168.1.100:8086/", "root", "root", InfluxDbVersion.v_1_0_0);
+                influxDbClient = new InfluxDbClient("http://famiel.ddns.net:8086/", "root", "root", InfluxDbVersion.v_1_0_0);
             }
             catch(InfluxDataWarningException ex)
             {
