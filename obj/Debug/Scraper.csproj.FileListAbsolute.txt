@@ -56,3 +56,6 @@ F:\Influx-Scraper\bin\Debug\Microsoft.Threading.Tasks.Extensions.Desktop.xml
 F:\Influx-Scraper\bin\Debug\Newtonsoft.Json.xml
 F:\Influx-Scraper\bin\Debug\System.Net.Http.Extensions.xml
 F:\Influx-Scraper\bin\Debug\System.Net.Http.Primitives.xml
+F:\Influx-Scraper\bin\Debug\BouncyCastle.dll
+F:\Influx-Scraper\bin\Debug\PushbulletSharp.dll
+F:\Influx-Scraper\bin\Debug\PushbulletSharp.pdb

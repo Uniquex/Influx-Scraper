@@ -12,11 +12,15 @@ namespace Scraper
         {
 
 
-            Observer influxDB = new Observer("InfluxDB");
+            InfluxDB influxDB = new InfluxDB("InfluxDB");
+            PushBulletObs pbobs = new PushBulletObs("PushbulletObserver");
 
             SiteTracker tracker = new SiteTracker();
 
+            
+
             tracker.Subscribe(influxDB);
+            tracker.Subscribe(pbobs);
 
             tracker.CheckforUpdate();
 

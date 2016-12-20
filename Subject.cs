@@ -31,9 +31,9 @@ namespace Scraper
             Sites sites = scp.readConfigFile();
             scp.Scrap(sites);
             
-            foreach(Observer obs in obslist)
+            foreach(IObserver<Sites> observer in obslist)
             {
-                obs.OnNext(sites);
+                observer.OnNext(sites);
             }
 
             //dbcon.checkData(sites);

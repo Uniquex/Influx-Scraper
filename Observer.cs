@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Scraper
 {
-    class Observer : IObserver<Sites>
+    class InfluxDB : IObserver<Sites>
     {
         private String observername;
         private IDisposable unsubscriber;
 
-        public Observer(String name)
+        public InfluxDB(String name)
         {
             this.observername = name;
         }
